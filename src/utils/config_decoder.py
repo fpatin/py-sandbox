@@ -1,13 +1,17 @@
 import json
 from inspect import Parameter, signature
+from typing import TypeVar, Type
 
 import yaml
+
+T = TypeVar('T')
+U = TypeVar('U')
 
 
 class ConfigDecoder:
 
     @staticmethod
-    def decode(clazz):
+    def decode(clazz: Type[T]) -> T:
 
         def is_not_self(p: Parameter) -> bool:
             return not p.name == 'self'
@@ -63,9 +67,9 @@ class ConfigDecoder:
         return _decoder
 
     @staticmethod
-    def decode_from_json(clazz: type, stream: str | bytes | bytearray):
+    def decode_from_json(clazz: Type[U], stream: str | bytes | bytearray) -> U:
         return json.loads(stream, object_hook=ConfigDecoder.decode(clazz))
 
     @staticmethod
-    def decode_from_yaml(clazz: type, stream: str | bytes | bytearray):
+    def decode_from_yaml(clazz: Type[U], stream: str | bytes | bytearray) -> U:
         return ConfigDecoder.decode(clazz)(yaml.safe_load(stream))
