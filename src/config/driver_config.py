@@ -23,4 +23,3 @@ class DriverConfig(object):
     @property
     def buffer_size(self) -> int:
         return self._buffer_size
-

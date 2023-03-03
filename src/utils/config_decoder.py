@@ -11,7 +11,10 @@ U = TypeVar('U')
 class ConfigDecoder:
 
     @staticmethod
-    def decode(clazz: Type[T]) -> T:
+    def __decode(clazz: Type[T]) -> T:
+
+        def is_simple_type(t: type) -> bool:
+            return t == str or t == int or t == float or t == bool
 
         def is_not_self(p: Parameter) -> bool:
             return not p.name == 'self'
@@ -24,14 +27,9 @@ class ConfigDecoder:
         def check_must_exist_in_dict(_dict: dict, param: Parameter):
             if param.default == Parameter.empty and param.name not in _dict:
                 raise KeyError(f'Missing mandatory key ({param.name})')
-            else:
-                pass
 
         def process(_dict: dict, param: Parameter):
-            if param.annotation == str \
-                    or param.annotation == int \
-                    or param.annotation == float \
-                    or param.annotation == bool:
+            if is_simple_type(param.annotation):
                 check_must_exist_in_dict(_dict, param)
                 return process_simple_type(_dict, param)
             elif type(_dict[param.name]) == list:
@@ -48,16 +46,13 @@ class ConfigDecoder:
                 return _dict[param.name]
 
         def process_list(_dict: dict, param: Parameter):
-            if param.annotation.__args__[0] == str \
-                    or param.annotation.__args__[0] == int \
-                    or param.annotation.__args__[0] == float \
-                    or param.annotation.__args__[0] == bool:
+            if is_simple_type(param.annotation.__args__[0]):
                 return [elem for elem in _dict[param.name]]
             else:
-                return [ConfigDecoder.decode(param.annotation.__args__[0])(elem) for elem in _dict[param.name]]
+                return [ConfigDecoder.__decode(param.annotation.__args__[0])(elem) for elem in _dict[param.name]]
 
         def process_object(_dict: dict, param: Parameter):
-            return ConfigDecoder.decode(param.annotation)(_dict[param.name])
+            return ConfigDecoder.__decode(param.annotation)(_dict[param.name])
 
         def _decoder(_dict: dict):
             constructor = signature(clazz.__init__)
@@ -68,8 +63,8 @@ class ConfigDecoder:
 
     @staticmethod
     def decode_from_json(clazz: Type[U], stream: str | bytes | bytearray) -> U:
-        return json.loads(stream, object_hook=ConfigDecoder.decode(clazz))
+        return json.loads(stream, object_hook=ConfigDecoder.__decode(clazz))
 
     @staticmethod
     def decode_from_yaml(clazz: Type[U], stream: str | bytes | bytearray) -> U:
-        return ConfigDecoder.decode(clazz)(yaml.safe_load(stream))
+        return ConfigDecoder.__decode(clazz)(yaml.safe_load(stream))

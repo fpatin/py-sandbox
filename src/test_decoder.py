@@ -39,7 +39,6 @@ def simple_example():
     result_yaml_ok_all_parameters: DriverConfig = ConfigDecoder.decode_from_yaml(DriverConfig, yaml_ok_all_parameters)
     print(f'\t\t{result_yaml_ok_all_parameters}')
     print(f'\t\tresult yaml_ok_all_parameters={isinstance(result_yaml_ok_all_parameters, DriverConfig)}')
-
     yaml_ok_mandatory = """
                     host: myhost2
                     port: 123
