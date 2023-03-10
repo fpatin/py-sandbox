@@ -4,14 +4,11 @@ formatters:
     #@see https://docs.python.org/3/library/logging.html#logrecord-attributes
     format: '%(asctime)s - %(levelname)-8s - %(name)-12s - %(pathname)s#%(funcName)s(%(lineno)d) - %(message)s'
     datefmt: '%Y-%m-%d %H:%M:%S'
-#  celery:
-#    (): src.logger.CeleryTaskLoggingFormatter
 handlers:
   console:
     class: logging.StreamHandler
     level: DEBUG
     formatter: simple
-#    formatter: celery
     stream: ext://sys.stdout
 loggers:
   other:

@@ -1,4 +1,4 @@
-from src.config.driver_config import DriverConfig
+from test.config.driver_config import DriverConfig
 from src.services.processor import Processor
 from src.drivers.xml_driver import XMLDriver
 from src.parsers.specific_parser import SpecificParser

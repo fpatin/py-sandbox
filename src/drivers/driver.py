@@ -1,7 +1,7 @@
 import socket
 
 from src.drivers.connection import Connection
-from src.config.driver_config import DriverConfig
+from test.config.driver_config import DriverConfig
 
 
 # https://www.geeksforgeeks.org/with-statement-in-python/

@@ -1,5 +1,5 @@
 from src.drivers.driver import Driver
-from src.config.driver_config import DriverConfig
+from test.config.driver_config import DriverConfig
 
 
 class XMLDriver(Driver):

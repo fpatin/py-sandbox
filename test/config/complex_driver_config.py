@@ -1,4 +1,4 @@
-from src.config.sub_driver_config import SubDriverConfig
+from test.config.sub_driver_config import SubDriverConfig
 
 
 class ComplexDriverConfig(object):
