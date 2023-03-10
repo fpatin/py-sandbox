@@ -18,5 +18,5 @@ class LoggerConfigurator:
 
     @staticmethod
     def __get_config_file() -> Path:
-        Path(os.environ['LOGGING_CONF']) if 'LOGGING_CONF' in os.environ else \
+        return Path(os.environ['LOGGING_CONF']) if 'LOGGING_CONF' in os.environ else \
             Path(__file__).parent.joinpath('dev_logging.yml')
