@@ -18,7 +18,7 @@ class ConfigDecoder:
         return clazz(value)
     
     def __is_simple_type(t: type) -> bool:
-        return t == str or t == int or t == float or t == bool
+        return t == str or t == int or t == float or t == bool or t == dict
 
     def __process_dict_elem(param: Parameter, _dict: dict):
         if param.default == Parameter.empty and param.name not in _dict:
