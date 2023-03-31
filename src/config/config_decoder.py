@@ -41,8 +41,7 @@ class ConfigDecoder:
             return issubclass(clazz.__origin__, Sequence)
         except:
             return False
-        
-    # Bug : ne tient pas compte du type paramétré de la liste
+
     def __handle_list(clazz: Type[List[Dest]], value: list) -> List[Dest]:
             return [ConfigDecoder.__handle(clazz.__args__[0], el) for el in value]
    
@@ -60,12 +59,10 @@ class ConfigDecoder:
             return ConfigDecoder.__handle(clazz, value)
         return curried
 
-    # Bug : ne prends pas en charge les dict->class nestées (ex: {"a": 1, "b": {"c": "foo"}})
     @staticmethod
     def decode_from_json(clazz: Type[Dest], stream: str | bytes | bytearray) -> Dest:
         return ConfigDecoder.decode(clazz)(json.loads(stream))
 
-    # Pas testé
     @staticmethod
     def decode_from_yaml(clazz: Type[U], stream: str | bytes | bytearray) -> U:
         return ConfigDecoder.__decode(clazz)(yaml.safe_load(stream))
