@@ -1,11 +1,32 @@
 import unittest
 
 from src.config.config_decoder import ConfigDecoder
+from test.config.Profiles import MainConfig
 from test.config.complex_driver_config import ComplexDriverConfig
 from test.config.driver_config import DriverConfig
 
 
 class ConfigDescriptorTest(unittest.TestCase):
+
+    def test_with_json_dict(self) -> None:
+        json = """{"profiles":{"1":{"suffixes":["un","deux"],"nb":1}}}"""
+        result = ConfigDecoder.decode_from_json(MainConfig, json)
+        print(result.profiles)
+        self.assertIsInstance(result, MainConfig)
+
+    def test_with_yaml_dict(self) -> None:
+        json = """
+                profiles:
+                    1:
+                        suffixes:
+                            - un
+                            - deux
+                        nb : 1
+                """
+        result = ConfigDecoder.decode_from_yaml(MainConfig, json)
+        print(result.profiles)
+        self.assertIsInstance(result, MainConfig)
+
 
     def test_json_mandatory(self) -> None:
         json = """{"host":"myhost","port":123,"buffer_size":1}"""
